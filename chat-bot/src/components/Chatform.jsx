@@ -1,45 +1,26 @@
-import React, { useRef } from 'react';
-import { SlCursor } from 'react-icons/sl';
+import { useRef } from "react";
+import { IoIosSend } from "react-icons/io";
 
-const Chatform = ({ setChatHistory,generateBotResponse }) => {
+const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
   const inputRef = useRef();
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const userMessage = inputRef.current.value.trim();
     if (!userMessage) return;
-    // Clear input field
-    inputRef.current.value = '';
-
-    // Update chat history
-    setChatHistory((history) => [...history, { role: 'user', text: userMessage }]);
-
-    // added a THining ... text for bot response
+    inputRef.current.value = "";
+    setChatHistory((history) => [...history, { role: "user", text: userMessage }]);
     setTimeout(() => {
-        setChatHistory((history) => [...history, { role: 'model', text:"Thinking..." }]);
+      setChatHistory((history) => [...history, { role: "model", text: "Thinking..." }]);
+      generateBotResponse([...chatHistory, { role: "user", text: `Using the details provided above, please address this query: ${userMessage}` }]);
     }, 600);
-    console.log(userMessage);
-    
-
-    
   };
-
   return (
-    <div>
-      <form action="#" className="chat-form" onSubmit={handleFormSubmit}>
-        <input
-          type="text"
-          placeholder="Message...."
-          className="message-input"
-          ref={inputRef}
-          required
-        />
-        <button type="submit">
-          <SlCursor />
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleFormSubmit} className="chat-form">
+      <input ref={inputRef} placeholder="Message..." className="message-input" required />
+      <button type="submit" id="send-message" >
+      <IoIosSend />
+      </button>
+    </form>
   );
 };
-
-export default Chatform;
+export default ChatForm;
